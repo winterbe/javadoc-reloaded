@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="author" content="Benjamin Winterberg">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Javadoc Reloaded - Benjamin Winterberg</title>
+
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <style type="text/css">
+        html {
+            box-sizing: border-box;
+            position: relative;
+            min-height: 100%;
+        }
+
+        body {
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .javadoc-content {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .navbar {
+            opacity: 0.95;
+            box-shadow: inset 0 -1px 0 #FFF;
+        }
+
+        .navbar .container-fluid {
+            position: relative;
+        }
+
+        body {
+            padding-top: 80px;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="http://winterbe.com" title="Benjamin Winterberg">
+            <i class="fa fa-home"></i> <span class="hidden-xs">winterbe.com</span>
+        </a>
+    </div>
+</nav>
+
+<div id="results" class="container">
+    <form id="filter" class="form-inline" role="form" style="text-align: center;">
+        <div class="input-group input-group-lg">
+            <span class="input-group-addon">
+                <i class="fa fa-search"></i>
+            </span>
+            <input id="search-input" type="text" class="form-control" placeholder="Search Javadoc..." autofocus>
+            <span class="input-group-addon" title="New types only">
+                <input id="new-types-only" type="checkbox">
+            </span>
+        </div>
+    </form>
+    <div id="content-list" class="list-group"></div>
+</div>
+
+<iframe class="javadoc-content" src="overview-summary.html" width="100%" height="100%"></iframe>
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
+
+<script>
+    $(function () {
+        var data = '{{DATA}}';
+
+        $('#search-input').typeahead(
+            {
+                highlight: true
+            },
+            {
+                displayKey: 'name',
+                source: function (query, process) {
+                    var suggestions = [];
+                    _.each(data, function (o) {
+                        if (o.name.toLowerCase().indexOf(query.trim().toLowerCase()) > -1) {
+                            suggestions.push(o);
+                        }
+                    });
+                    process(suggestions);
+                }
+            });
+    });
+</script>
+
+</body>
+</html>

@@ -1,13 +1,13 @@
 package com.winterbe.javadoc;
 
-import java.io.IOException;
+import java.util.List;
 
 /**
  * @author Benjamin Winterberg
  */
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         String basePath = System.getProperty("basePath");
 
         System.out.println("parsing files from basePath: " + basePath);
@@ -15,17 +15,15 @@ public class Main {
         FileWalker fileWalker = new FileWalker();
         ExplorerResult result = fileWalker.walk(basePath);
 
-        System.out.println(result.getStatistics());
+        List<TypeInfo> typeInfos = result.getTypeInfos();
+        typeInfos.sort((t1, t2) -> t1.getPackageName().compareTo(t2.getPackageName()));
 
-//        List<TypeInfo> typeInfos = result.getTypeInfos();
-//        typeInfos.sort((t1, t2) -> t1.getPackageName().compareTo(t2.getPackageName()));
-//
-//        System.out.println("creating site");
-//
-//        SiteCreator siteCreator = new SiteCreator();
-//        siteCreator.createSite(result);
-//
-//        System.out.println("done");
+        System.out.println("creating site");
+
+        SiteCreator siteCreator = new SiteCreator();
+        siteCreator.createSite(result);
+
+        System.out.println("done");
     }
 
 }
