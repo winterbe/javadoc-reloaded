@@ -140,72 +140,76 @@
         }
 
         .twitter-typeahead {
-            font-weight: 200;
-        }
-
-        .twitter-typeahead .tt-dropdown-menu {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            z-index: 1000;
-            display: none;
-            float: left;
-            min-width: 160px;
-            padding: 5px 0;
-            margin: 2px 0 0;
-            list-style: none;
-            font-size: 14px;
-            text-align: left;
-            background-color: #ffffff;
-            border: 1px solid #cccccc;
-            border: 1px solid rgba(0, 0, 0, 0.15);
-            border-radius: 4px;
-            -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-            background-clip: padding-box;
-        }
-
-        .twitter-typeahead .tt-suggestion > p {
-            display: block;
-            padding: 3px 20px;
-            clear: both;
-            font-weight: normal;
-            line-height: 1.42857143;
-            color: #333333;
-            white-space: nowrap;
-        }
-
-        .twitter-typeahead .tt-suggestion > p:hover,
-        .twitter-typeahead .tt-suggestion > p:focus {
-            color: #ffffff;
-            text-decoration: none;
-            outline: 0;
-            background-color: #428bca;
-        }
-
-        .twitter-typeahead .tt-suggestion.tt-cursor {
-            color: #ffffff !important;
-            background-color: #428bca;
-        }
-
-        .twitter-typeahead {
             width: 100%;
         }
 
-        .input-group .twitter-typeahead {
-            display: block !important;
+        .typeahead, .tt-hint {
+            width: 574px;
+            height: 30px;
+            padding: 8px 12px;
+            font-size: 24px;
+            line-height: 30px;
+            border: 1px solid #024e6a;
+            border-radius: 4px;
+            outline: none;
         }
 
-        .input-group .twitter-typeahead .tt-dropdown-menu {
-            top: 32px !important;
+        .typeahead {
+            background-color: #fff;
         }
 
-        .input-group.input-group-lg .twitter-typeahead .tt-dropdown-menu {
-            top: 44px !important;
+        .tt-hint {
+            color: #999
         }
 
-        .input-group.input-group-sm .twitter-typeahead .tt-dropdown-menu {
-            top: 28px !important;
+        .tt-dropdown-menu {
+            width: 600px;
+            max-height: 600px;
+            overflow: auto;
+            margin-top: 12px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            -webkit-border-radius: 8px;
+            -moz-border-radius: 8px;
+            border-radius: 8px;
+            -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+            -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+        }
+
+        .tt-suggestion {
+            padding: 8px 20px;
+            font-size: 14px;
+            line-height: 18px;
+            cursor: pointer;
+        }
+
+        .tt-suggestion + .tt-suggestion {
+            font-size: 14px;
+            border-top: 1px solid #ccc;
+        }
+
+        .tt-suggestions .package {
+            font-style: italic;
+            clear: both;
+            margin: 0;
+            color: #CCC;
+        }
+
+        .tt-suggestions .name {
+            float: left;
+            margin: 0;
+        }
+
+        .tt-suggestions .type {
+            float: right;
+            margin: 0;
+            color: #CCC;
+        }
+
+        .twitter-typeahead .tt-suggestion.tt-cursor {
+            background-color: #D4EAFA;
         }
     </style>
 </head>
@@ -239,7 +243,7 @@
 
         $('#search-input')
             .typeahead({
-                highlight: true,
+                highlight: false,
                 minLength: 3
             }, {
                 displayKey: 'name',
@@ -251,11 +255,19 @@
                         }
                     });
                     process(suggestions);
+                },
+                templates: {
+                    suggestion: function (o) {
+                        return "<p class='name'>" + o.name + "</p>" +
+                            "<p class='type'>" + o.fileType + "</p>" +
+                            "<p class='package'>" + o.packageName + "</p>";
+                    }
                 }
             })
             .on('typeahead:selected', function (ev, o, ds) {
                 $('#content').attr('src', o.path);
-            });
+            })
+            .eq(0).val("str").trigger("input");
     });
 </script>
 
