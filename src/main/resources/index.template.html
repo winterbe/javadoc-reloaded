@@ -19,32 +19,128 @@
     <style type="text/css">
         html {
             box-sizing: border-box;
-            position: relative;
-            min-height: 100%;
         }
 
         body {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
             overflow: hidden;
-            height: 100%;
         }
 
-        .javadoc-content {
+        .main {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+        }
+
+        .dock {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 44px;
+            border-bottom: 1px solid #79AED4;
+            background: #F2F2F2;
+        }
+
+        .dock .title {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 44px;
+            width: 250px;
+            border-right: 1px solid #AAC6D8;
+            border-bottom: 1px solid #79AED4;
+            background: #D2EAFA;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .dock .title h1 {
+            font-size: 18px;
+            line-height: 44px;
+            margin: 0 20px 0;
+            color: #79AED4;
+            font-weight: 200;
+        }
+
+        .dock .title h1 strong {
+            font-weight: 700;
+        }
+
+
+        .dock .search {
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 250px;
+            height: 44px;
+            border-bottom: 1px solid #79AED4;
+        }
+
+        .dock .search input {
+            border: 0;
+            background: transparent;
+            height: 44px;
+            width: 100%;
+            padding: 10px;
+            margin: 0 22px 0;
+            font-size: 18px;
+            font-weight: 200;
+            color: #333;
+        }
+
+        .dock .search input:focus {
+            outline: none;
+        }
+
+        .dock .search input:-ms-input-placeholder,
+        .dock .search input::-moz-placeholder,
+        .dock .search input::-webkit-input-placeholder {
+            color: #ABABAB;
+            font-weight: 100;
+            opacity: 1;
+        }
+
+        .dock .search .fa-search {
+            position: absolute;
+            top: 12px;
+            left: 8px;
+            color: #ABABAB;
+            font-weight: 100;
+            font-size: 20px;
+        }
+
+        .sidebar {
+            position: absolute;
+            top: 44px;
+            bottom: 0;
+            left: 0;
+            width: 250px;
+            border-right: 1px solid #AAC6D8;
+            background: #D4EAFA;
+        }
+
+        .content {
+            position: absolute;
+            top: 44px;
+            bottom: 0;
+            left: 250px;
+            right: 0;
+        }
+
+        iframe {
+            border: 0;
             width: 100%;
             height: 100%;
-            border: 0;
         }
 
-        .navbar {
-            opacity: 0.95;
-            box-shadow: inset 0 -1px 0 #FFF;
-        }
-
-        .navbar .container-fluid {
-            position: relative;
-        }
-
-        body {
-            padding-top: 80px;
+        .twitter-typeahead {
+            font-weight: 200;
         }
 
         .twitter-typeahead .tt-dropdown-menu {
@@ -114,30 +210,24 @@
     </style>
 </head>
 <body>
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="http://winterbe.com" title="Benjamin Winterberg">
-            <i class="fa fa-home"></i> <span class="hidden-xs">winterbe.com</span>
-        </a>
-    </div>
-</nav>
 
-<div id="results" class="container">
-    <form id="filter" class="form-inline" role="form" style="text-align: center;">
-        <div class="input-group input-group-lg">
-            <span class="input-group-addon">
-                <i class="fa fa-search"></i>
-            </span>
-            <input id="search-input" type="text" class="form-control" placeholder="Search Javadoc..." autofocus>
-            <span class="input-group-addon" title="New types only">
-                <input id="new-types-only" type="checkbox">
-            </span>
+
+<div class="main">
+    <div class="dock">
+        <div class="title">
+            <h1><strong>JAVA</strong>DOC API</h1>
         </div>
-    </form>
-    <!--<div id="content-list" class="list-group"></div>-->
+        <div class="search">
+            <i class="fa fa-search"></i>
+            <input id="search-input" type="text" placeholder="Enter a class name..." autofocus>
+        </div>
+    </div>
+    <div class="sidebar"></div>
+    <div class="content">
+        <iframe id="content" src="overview-summary.html"></iframe>
+    </div>
 </div>
 
-<iframe id="content" class="javadoc-content" src="overview-summary.html" width="100%" height="100%"></iframe>
 
 <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
