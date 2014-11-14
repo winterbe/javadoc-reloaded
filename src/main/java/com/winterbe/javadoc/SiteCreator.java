@@ -19,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Benjamin Winterberg
@@ -35,7 +36,9 @@ public class SiteCreator {
 
         URL url = getClass()
                 .getClassLoader()
-                .getResource("index.html");
+                .getResource("search.js");
+
+        Objects.requireNonNull(url);
 
         URI uri = url.toURI();
         Path path = Paths.get(uri);
@@ -44,7 +47,7 @@ public class SiteCreator {
         String template = new String(bytes, StandardCharsets.UTF_8);
         template = StringUtils.replaceOnce(template, "'{{DATA}}'", data);
 
-        File file = new File("_site/index.html");
+        File file = new File("_site/search.js");
         BufferedWriter htmlWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
         htmlWriter.write(template);
         htmlWriter.flush();
@@ -63,8 +66,14 @@ public class SiteCreator {
         System.out.println("copying javadoc files");
         FileUtils.copyDirectory(new File(basePath), site);
 
-        InputStream cssStream = getClass().getClassLoader().getResourceAsStream("stylesheet.css");
-        File cssFile = new File("_site/stylesheet.css");
+        copyResource("stylesheet.css");
+        copyResource("main.css");
+        copyResource("index.html");
+    }
+
+    private void copyResource(String filename) throws IOException {
+        InputStream cssStream = getClass().getClassLoader().getResourceAsStream(filename);
+        File cssFile = new File("_site/" + filename);
         cssFile.delete();
         FileOutputStream fos = new FileOutputStream(cssFile);
         IOUtils.copy(cssStream, fos);
