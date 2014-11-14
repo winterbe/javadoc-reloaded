@@ -13,12 +13,18 @@ $(function () {
             return _.filter(items, function (o) {
                 return o['packageName'].toLowerCase().indexOf(val) > -1;
             });
+        },
+        'version': function (val, items) {
+            return _.filter(items, function (o) {
+                return o['version'].toLowerCase().indexOf(val) > -1;
+            });
         }
     };
 
     // aliases
     filters['pkg'] = filters['package'];
     filters['from'] = filters['package'];
+    filters['since'] = filters['version'];
 
     var parseQuery = function (query) {
         query = query.trim();

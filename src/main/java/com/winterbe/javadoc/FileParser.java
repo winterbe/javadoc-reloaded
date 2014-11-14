@@ -56,6 +56,15 @@ public class FileParser {
         typeInfo.setPackageName(packageName);
         typeInfo.setPath(path);
 
+        body.select(".contentContainer .description dl dt .simpleTagLabel")
+                .stream()
+                .filter(el -> el.text().contains("Since"))
+                .findFirst()
+                .ifPresent(el -> {
+                    String version = el.parent().nextElementSibling().text();
+                    typeInfo.setVersion(version);
+                });
+
         return Optional.of(typeInfo);
     }
 }
