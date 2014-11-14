@@ -21,7 +21,7 @@ public class Main {
         System.out.println("creating site");
 
         SiteCreator siteCreator = new SiteCreator();
-        siteCreator.createSite(result);
+        siteCreator.createSite(result, basePath);
 
         System.out.println("done");
     }

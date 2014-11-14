@@ -1,12 +1,15 @@
 package com.winterbe.javadoc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -22,7 +25,9 @@ import java.util.List;
  */
 public class SiteCreator {
 
-    public void createSite(ExplorerResult result) throws IOException, URISyntaxException {
+    public void createSite(ExplorerResult result, String basePath) throws IOException, URISyntaxException {
+        createSiteDirectory(basePath);
+
         List<TypeInfo> typeInfos = result.getTypeInfos();
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -30,7 +35,7 @@ public class SiteCreator {
 
         URL url = getClass()
                 .getClassLoader()
-                .getResource("index.template.html");
+                .getResource("index.html");
 
         URI uri = url.toURI();
         Path path = Paths.get(uri);
@@ -46,4 +51,23 @@ public class SiteCreator {
         htmlWriter.close();
     }
 
+    private void createSiteDirectory(String basePath) throws IOException {
+        File site = new File("_site");
+        if (!site.exists()) {
+            Files.createDirectory(Paths.get("_site"));
+        }
+
+        System.out.println("clean site directory");
+        FileUtils.cleanDirectory(site);
+
+        System.out.println("copying javadoc files");
+        FileUtils.copyDirectory(new File(basePath), site);
+
+        InputStream cssStream = getClass().getClassLoader().getResourceAsStream("stylesheet.css");
+        File cssFile = new File("_site/stylesheet.css");
+        cssFile.delete();
+        FileOutputStream fos = new FileOutputStream(cssFile);
+        IOUtils.copy(cssStream, fos);
+        IOUtils.closeQuietly(fos);
+    }
 }

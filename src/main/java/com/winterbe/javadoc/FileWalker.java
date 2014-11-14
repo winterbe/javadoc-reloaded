@@ -1,17 +1,11 @@
 package com.winterbe.javadoc;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -27,8 +21,6 @@ public class FileWalker {
         basePath = StringUtils.removeEnd(basePath, "/");
 
         List<String> paths = getPaths(basePath);
-
-        createSiteDirectory(basePath);
 
         FileParser parser = new FileParser();
 
@@ -52,26 +44,6 @@ public class FileWalker {
         ExplorerResult result = new ExplorerResult();
         result.setTypeInfos(typeInfos);
         return result;
-    }
-
-    private void createSiteDirectory(String basePath) throws IOException {
-        File site = new File("_site");
-        if (!site.exists()) {
-            Files.createDirectory(Paths.get("_site"));
-        }
-
-        System.out.println("clean site directory");
-        FileUtils.cleanDirectory(site);
-
-        System.out.println("copying javadoc files");
-        FileUtils.copyDirectory(new File(basePath), site);
-
-        InputStream cssStream = getClass().getClassLoader().getResourceAsStream("stylesheet.css");
-        File cssFile = new File("_site/stylesheet.css");
-        cssFile.delete();
-        FileOutputStream fos = new FileOutputStream(cssFile);
-        IOUtils.copy(cssStream, fos);
-        IOUtils.closeQuietly(fos);
     }
 
     private List<String> getPaths(String basePath) throws IOException {
