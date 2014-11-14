@@ -301,7 +301,7 @@
             _.each(criteria, function (criterion) {
                 if (suggestions.length > 0) {
                     var filter = filters[criterion.filter];
-                    var val = filters[criterion.value];
+                    var val = criterion.value;
                     if (filter && val) {
                         suggestions = filter(val, suggestions);
                     }
@@ -315,10 +315,10 @@
         $('#search-input')
             .typeahead({
                 highlight: false,
-                minLength: 3
+                minLength: 1
             }, {
                 displayKey: 'name',
-                source: source,
+                source: _.debounce(source, 500),
                 templates: {
                     suggestion: function (o) {
                         return "<p class='name'>" + o.name + "</p>" +
