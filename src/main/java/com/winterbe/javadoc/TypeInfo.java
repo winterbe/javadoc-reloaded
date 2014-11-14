@@ -1,7 +1,5 @@
 package com.winterbe.javadoc;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * @author Benjamin Winterberg
  */
@@ -72,11 +70,6 @@ public class TypeInfo {
 
     public void setPath(String path) {
         this.path = path;
-    }
-
-    public String getId() {
-        String id = packageName + name;
-        return StringUtils.remove(id, '.');
     }
 
     public String getPackageName() {
