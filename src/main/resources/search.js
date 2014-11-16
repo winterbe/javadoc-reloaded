@@ -18,13 +18,20 @@ $(function () {
             return _.filter(items, function (o) {
                 return o['version'].toLowerCase().indexOf(val) > -1;
             });
+        },
+        'extends': function (val, items) {
+            return _.filter(items, function (o) {
+                return o['filterExtends'].indexOf(val) > -1;
+            });
         }
     };
 
     // aliases
     filters['pkg'] = filters['package'];
     filters['from'] = filters['package'];
+    filters['in'] = filters['package'];
     filters['since'] = filters['version'];
+    filters['sub'] = filters['extends'];
 
     var parseQuery = function (query) {
         query = query.trim();

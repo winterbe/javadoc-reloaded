@@ -36,9 +36,9 @@ public class FileWalker {
             Optional<TypeInfo> optional = parser.parse(sourceFile, path);
             optional.ifPresent(typeInfos::add);
 
-            if (i == 500) {
-                break;
-            }
+//            if (i == 500) {
+//                break;
+//            }
         }
 
         ExplorerResult result = new ExplorerResult();
