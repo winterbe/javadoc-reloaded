@@ -67,11 +67,11 @@ public class FileParser {
 
         body.select(".inheritance > li:first-of-type > a")
                 .stream()
-                .forEach(el -> {
-                    String clazz = StringUtils.substringAfterLast(el.text(), ".");
+                .map(el -> StringUtils.lowerCase(el.text()))
+                .map(s -> StringUtils.substringAfterLast(s, "."))
+                .forEach(type -> {
                     String filterExtends = typeInfo.getFilterExtends();
-                    filterExtends += " " + clazz;
-                    typeInfo.setFilterExtends(StringUtils.lowerCase(filterExtends));
+                    typeInfo.setFilterExtends(filterExtends + " " + type);
                 });
 
         body.select(".contentContainer > .description > ul.blockList > li.blockList > dl > dt")
@@ -85,8 +85,7 @@ public class FileParser {
                         .map(a -> StringUtils.lowerCase(a.text()))
                         .forEach(type -> {
                             String filterExtends = typeInfo.getFilterExtends();
-                            filterExtends += " " + type;
-                            typeInfo.setFilterExtends(filterExtends);
+                            typeInfo.setFilterExtends(filterExtends + " " + type);
                         }));
 
         return Optional.of(typeInfo);
