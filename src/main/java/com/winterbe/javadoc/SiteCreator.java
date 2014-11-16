@@ -60,10 +60,9 @@ public class SiteCreator {
             Files.createDirectory(Paths.get("_site"));
         }
 
-        System.out.println("clean site directory");
         FileUtils.cleanDirectory(site);
 
-        System.out.println("copying javadoc files");
+        System.out.println("   copying javadoc files...");
         FileUtils.copyDirectory(new File(basePath), site);
 
         copyResource("stylesheet.css");

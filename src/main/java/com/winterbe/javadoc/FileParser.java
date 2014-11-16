@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * @author Benjamin Winterberg
@@ -77,17 +76,18 @@ public class FileParser {
 
         body.select(".contentContainer > .description > ul.blockList > li.blockList > dl > dt")
                 .stream()
-                .filter(el -> el.text().contains("All Implemented Interfaces:"))
+                .filter(el ->
+                        el.text().contains("All Implemented Interfaces:") ||
+                        el.text().contains("All Superinterfaces:"))
                 .findFirst()
-                .ifPresent(el -> {
-                    String interfaces = el.nextElementSibling().select("a")
-                            .stream()
-                            .map(a -> a.text())
-                            .collect(Collectors.joining(" "));
-                    String filterExtends = typeInfo.getFilterExtends();
-                    filterExtends += " " + StringUtils.lowerCase(interfaces);
-                    typeInfo.setFilterExtends(filterExtends);
-                });
+                .ifPresent(el -> el.nextElementSibling().select("a")
+                        .stream()
+                        .map(a -> StringUtils.lowerCase(a.text()))
+                        .forEach(type -> {
+                            String filterExtends = typeInfo.getFilterExtends();
+                            filterExtends += " " + type;
+                            typeInfo.setFilterExtends(filterExtends);
+                        }));
 
         return Optional.of(typeInfo);
     }

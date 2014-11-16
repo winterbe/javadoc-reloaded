@@ -26,7 +26,7 @@ public class FileWalker {
 
         List<TypeInfo> typeInfos = new ArrayList<>();
 
-        System.out.println("parsing type infos");
+        System.out.print("   parsing type infos... ");
 
         for (int i = 0; i < paths.size(); i++) {
             String path = paths.get(i);
@@ -40,6 +40,8 @@ public class FileWalker {
 //                break;
 //            }
         }
+
+        System.out.println(typeInfos.size() + " found");
 
         ExplorerResult result = new ExplorerResult();
         result.setTypeInfos(typeInfos);

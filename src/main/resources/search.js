@@ -77,7 +77,9 @@ $(function () {
             if (suggestions.length > 0) {
                 var filter = filters[criterion.filter];
                 var val = criterion.value;
-                if (filter && val) {
+                if (!val) {
+                    suggestions = [];
+                } else if (filter) {
                     suggestions = filter(val, suggestions);
                 }
             }
