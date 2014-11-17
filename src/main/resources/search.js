@@ -54,14 +54,20 @@ $(function () {
             if (idx < 0) {
                 criteria.push({
                     filter: 'name',
-                    value: token
+                    value: token.toLowerCase()
                 });
                 sort = 'relevance';
                 continue;
             }
 
-            var value = token.slice(idx + 1);
-            var filter = token.slice(0, idx);
+            var value = token.slice(idx + 1).toLowerCase();
+            var filter = token.slice(0, idx).toLocaleLowerCase();
+
+            // aliases
+            if (filter === 'is' && (value === 'fn' || value === 'lambda')) {
+                value = 'functional';
+            }
+
             criteria.push({
                 filter: filter,
                 value: value
