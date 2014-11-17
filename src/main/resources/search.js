@@ -23,6 +23,11 @@ $(function () {
             return _.filter(items, function (o) {
                 return o['filterExtends'].indexOf(val) > -1;
             });
+        },
+        'is': function (val, items) {
+            return _.filter(items, function (o) {
+                return o['filterIs'].indexOf(val) > -1;
+            });
         }
     };
 

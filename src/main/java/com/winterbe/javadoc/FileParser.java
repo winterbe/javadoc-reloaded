@@ -88,6 +88,42 @@ public class FileParser {
                             typeInfo.setFilterExtends(filterExtends + " " + type);
                         }));
 
+        body.select(".contentContainer > .description > ul.blockList > li.blockList > pre")
+                .stream()
+                .map(el -> el.text())
+                .findFirst()
+                .ifPresent(code -> {
+                    String filterIs = typeInfo.getFilterIs();
+
+                    if (code.contains("abstract ")) {
+                        filterIs += " abstract";
+                    }
+
+                    if (code.contains("class ")) {
+                        filterIs += " class";
+                    }
+
+                    if (code.contains("enum ")) {
+                        filterIs += " enum";
+                    }
+
+                    if (code.contains("FunctionalInterface")) {
+                        filterIs += " functional";
+                    }
+
+                    if (code.contains("final ")) {
+                        filterIs += " final";
+                    }
+
+                    if (code.contains("@interface")) {
+                        filterIs += " annotation";
+                    } else if (code.contains("interface")) {
+                        filterIs += " interface";
+                    }
+
+                    typeInfo.setFilterIs(filterIs);
+                });
+
         return Optional.of(typeInfo);
     }
 }

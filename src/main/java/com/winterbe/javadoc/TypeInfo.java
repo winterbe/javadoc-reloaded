@@ -12,7 +12,6 @@ public class TypeInfo {
     private String version = "undefined";
 
     private String filterExtends = "";
-    private String filterSuper = "";
     private String filterIs = "";
     private String filterHas = "";
 
@@ -30,14 +29,6 @@ public class TypeInfo {
 
     public void setFilterExtends(String filterExtends) {
         this.filterExtends = filterExtends;
-    }
-
-    public String getFilterSuper() {
-        return filterSuper;
-    }
-
-    public void setFilterSuper(String filterSuper) {
-        this.filterSuper = filterSuper;
     }
 
     public String getFilterIs() {
