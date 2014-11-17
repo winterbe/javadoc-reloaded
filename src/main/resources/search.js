@@ -40,8 +40,9 @@ $(function () {
 
     var parseQuery = function (query) {
         query = query.trim();
-        var result = [];
+        var criteria = [];
         var tokens = query.split(' ');
+        var sort = 'alphabetic';
 
         for (var i = 0; i < tokens.length; i++) {
             var token = tokens[i];
@@ -51,24 +52,27 @@ $(function () {
 
             var idx = token.indexOf(':');
             if (idx < 0) {
-                result.push({
+                criteria.push({
                     filter: 'name',
                     value: token
                 });
+                sort = 'relevance';
                 continue;
             }
 
             var value = token.slice(idx + 1);
             var filter = token.slice(0, idx);
-            result.push({
+            criteria.push({
                 filter: filter,
                 value: value
             });
         }
 
-        return result;
+        return {
+            criteria: criteria,
+            sort: sort
+        };
     };
-
 
     var source = function (query, process) {
         if (!query) {
@@ -76,9 +80,9 @@ $(function () {
         }
 
         var suggestions = data;
-        var criteria = parseQuery(query);
+        var parsedQuery = parseQuery(query);
 
-        _.each(criteria, function (criterion) {
+        _.each(parsedQuery.criteria, function (criterion) {
             if (suggestions.length > 0) {
                 var filter = filters[criterion.filter];
                 var val = criterion.value;
@@ -89,6 +93,46 @@ $(function () {
                 }
             }
         });
+
+        if (parsedQuery.sort === 'relevance') {
+            suggestions.sort(function (a, b) {
+                var name1 = a.name;
+                var name2 = b.name;
+
+                if (name1.length < name2.length) {
+                    return -1
+                }
+
+                if (name1.length > name2.length) {
+                    return 1;
+                }
+
+                if (name1 < name2) {
+                    return -1
+                }
+
+                if (name1 > name2) {
+                    return 1;
+                }
+
+                return 0;
+            });
+        } else {
+            suggestions.sort(function (a, b) {
+                var name1 = a.name;
+                var name2 = b.name;
+
+                if (name1 < name2) {
+                    return -1
+                }
+
+                if (name1 === name2) {
+                    return 0;
+                }
+
+                return 1;
+            });
+        }
 
         process(suggestions);
     };

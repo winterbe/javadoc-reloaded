@@ -7,6 +7,7 @@ public enum FileType {
     CLASS,
     INTERFACE,
     ENUM,
+    ANNOTATION,
     UNKNOWN;
 
     public static FileType ofFullType(String fullType) {
@@ -18,6 +19,9 @@ public enum FileType {
         }
         if (fullType.startsWith("Enum")) {
             return ENUM;
+        }
+        if (fullType.startsWith("Annotation")) {
+            return ANNOTATION;
         }
         return UNKNOWN;
     }
