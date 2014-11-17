@@ -80,27 +80,39 @@ $(function () {
         };
     };
 
+    var updateSidebar = function (suggestions) {
+        var $sidebar = $('.sidebar');
+        $sidebar.html('');
+
+        _.each(suggestions, function (suggestion) {
+            $('<a>')
+                .attr('href', suggestion.path)
+                .attr('target', 'javadoc')
+                .text(suggestion.name)
+                .appendTo($sidebar);
+        });
+    };
+
     var source = function (query, process) {
-        if (!query) {
-            process([]);
+        var suggestions = data;
+
+        if (query) {
+            var parsedQuery = parseQuery(query);
+
+            _.each(parsedQuery.criteria, function (criterion) {
+                if (suggestions.length > 0) {
+                    var filter = filters[criterion.filter];
+                    var val = criterion.value;
+                    if (!val) {
+                        suggestions = [];
+                    } else if (filter) {
+                        suggestions = filter(val, suggestions);
+                    }
+                }
+            });
         }
 
-        var suggestions = data;
-        var parsedQuery = parseQuery(query);
-
-        _.each(parsedQuery.criteria, function (criterion) {
-            if (suggestions.length > 0) {
-                var filter = filters[criterion.filter];
-                var val = criterion.value;
-                if (!val) {
-                    suggestions = [];
-                } else if (filter) {
-                    suggestions = filter(val, suggestions);
-                }
-            }
-        });
-
-        if (parsedQuery.sort === 'relevance') {
+        if (parsedQuery && parsedQuery.sort === 'relevance') {
             suggestions.sort(function (a, b) {
                 var name1 = a.name;
                 var name2 = b.name;
@@ -145,21 +157,10 @@ $(function () {
 
 
     $('#search-input')
-        .typeahead({
-            highlight: false,
-            minLength: 1
-        }, {
-            displayKey: 'name',
-            source: _.debounce(source, 500),
-            templates: {
-                suggestion: function (o) {
-                    return "<p class='name'>" + o.name + "</p>" +
-                        "<p class='type'>" + o.fileType + "</p>" +
-                        "<p class='package'>" + o.packageName + "</p>";
-                }
+        .on('keyup', function (ev) {
+            if (ev.keyCode === 13) {
+                var query = $(this).val();
+                source(query, _.debounce(updateSidebar, 250, true));
             }
-        })
-        .on('typeahead:selected', function (ev, o, ds) {
-            $('#content').attr('src', o.path);
         });
 });

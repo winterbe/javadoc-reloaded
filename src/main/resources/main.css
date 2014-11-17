@@ -103,6 +103,21 @@ body {
     width: 250px;
     border-right: 1px solid #AAC6D8;
     background: #D4EAFA;
+    overflow: auto;
+}
+
+.sidebar a {
+    display: block;
+    padding: 10px 15px;
+    color: #79AED4;
+    font-weight: 200;
+    border-bottom: 1px solid #AAC6D8;
+}
+
+.sidebar a:hover {
+    text-decoration: none;
+    background: #79AED4;
+    color: white;
 }
 
 .content {
