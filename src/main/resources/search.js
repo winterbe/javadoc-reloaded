@@ -88,9 +88,10 @@ $(function () {
         };
     };
 
-    var updateSidebar = function (suggestions) {
+    var renderSearchResults = function (suggestions) {
         var $sidebar = $('.sidebar');
         $sidebar.html('');
+        $sidebar.scrollTop();
 
         _.each(suggestions, function (suggestion) {
             $('<a>')
@@ -102,32 +103,34 @@ $(function () {
         });
     };
 
-    var source = function (query, process) {
-        var suggestions = data;
+    var doSearch = function (query) {
+        console.log('searching javadoc: %s', query);
+
+        var searchResults = data;
 
         var parsedQuery = parseQuery(query);
 
         _.each(parsedQuery.criteria, function (criterion) {
-            if (suggestions.length > 0) {
+            if (searchResults.length > 0) {
                 var filter = filters[criterion.filter];
                 var val = criterion.value;
                 if (!val) {
-                    suggestions = [];
+                    searchResults = [];
                 } else if (filter) {
-                    suggestions = filter(val, suggestions);
+                    searchResults = filter(val, searchResults);
                 }
             }
         });
 
         // get rid of corba stuff
         if (query.toLowerCase().indexOf('corba') < 0 || query.toLowerCase().indexOf('omg') < 0) {
-            suggestions = _.filter(suggestions, function (o) {
+            searchResults = _.filter(searchResults, function (o) {
                 return o['packageName'].indexOf('org.omg') < 0;
             });
         }
 
         if (parsedQuery.sort === 'relevance') {
-            suggestions.sort(function (a, b) {
+            searchResults.sort(function (a, b) {
                 var name1 = a.name.toLowerCase();
                 var name2 = b.name.toLowerCase();
 
@@ -150,7 +153,7 @@ $(function () {
                 return 0;
             });
         } else {
-            suggestions.sort(function (a, b) {
+            searchResults.sort(function (a, b) {
                 var name1 = a.name.toLowerCase();
                 var name2 = b.name.toLowerCase();
 
@@ -166,15 +169,23 @@ $(function () {
             });
         }
 
-        process(suggestions);
+        renderSearchResults(searchResults);
+
+        if (localStorage) {
+            localStorage.setItem("query", query);
+        }
     };
 
+    var search = _.debounce(doSearch, 250);
+
+    var query = localStorage ? localStorage.getItem('query') : '';
+    search(query, renderSearchResults);
 
     $('#search-input')
         .on('keyup', function (ev) {
             if (ev.keyCode === 13) {
-                var query = $(this).val();
-                source(query, _.debounce(updateSidebar, 250, true));
+                search($(this).val());
             }
-        });
+        })
+        .val(query);
 });

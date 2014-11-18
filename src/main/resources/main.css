@@ -104,16 +104,18 @@ body {
     border-right: 1px solid #AAC6D8;
     background: #D4EAFA;
     font-size: 13px;
-    overflow: auto;
+    padding-bottom: 25px;
+    overflow-y: auto;
+    overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
 }
 
 .sidebar a {
+    position: relative;
     display: block;
     padding: 10px 15px;
-    color: #79AED4;
+    color: #364C5D;
     font-weight: 400;
-    border-bottom: 1px solid #AAC6D8;
 }
 
 .sidebar a.interface {
@@ -122,8 +124,48 @@ body {
 
 .sidebar a:hover {
     text-decoration: none;
-    background: #79AED4;
-    color: white;
+    background: #BCE3FA;
+    color: #0074FF;
+}
+
+.sidebar a:not(:hover):not(:first-of-type):before {
+    content: '';
+    position: absolute;
+    top: 0;
+    height: 1px;
+    left: 0;
+    right: 0;
+    background-color: #e4f2fc;
+}
+
+.sidebar a:not(:hover):not(:last-of-type):after {
+    content: '';
+    position: absolute;
+    height: 1px;
+    left: 0;
+    right: 0;
+    top: 37px;
+    background-color: #cde3f1;
+}
+
+.sidebar a:hover:before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    height: 1px;
+    left: 0;
+    right: 0;
+    background-color: #9ED4F8;
+}
+
+.sidebar a:hover:after {
+    content: '';
+    position: absolute;
+    height: 1px;
+    left: 0;
+    right: 0;
+    top: 37px;
+    background-color: #9ED4F8;
 }
 
 .content {
