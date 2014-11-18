@@ -88,7 +88,16 @@ $(function () {
         };
     };
 
+    var now = function () {
+        if (Date.now) {
+            return Date.now();
+        }
+        return new Date().getTime();
+    };
+
     var renderSearchResults = function (suggestions) {
+        var t0 = now();
+
         var $sidebar = $('.sidebar');
         $sidebar.html('');
         $sidebar.scrollTop();
@@ -101,10 +110,14 @@ $(function () {
                 .addClass(suggestion.fileType.toLowerCase())
                 .appendTo($sidebar);
         });
+
+        console.log('rendering took %dms', now() - t0);
     };
 
     var doSearch = function (query) {
-        console.log('searching javadoc: %s', query);
+        console.log('searching javadoc for query: %s', query);
+
+        var t0 = now();
 
         var searchResults = data;
 
@@ -168,6 +181,8 @@ $(function () {
                 return 1;
             });
         }
+
+        console.log('search took %dms', now() - t0);
 
         renderSearchResults(searchResults);
 
