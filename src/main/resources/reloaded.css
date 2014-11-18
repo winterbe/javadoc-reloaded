@@ -53,6 +53,12 @@ body {
     font-weight: 700;
 }
 
+.dock .title h1 .version {
+    padding-left: 10px;
+    font-weight: 700;
+    font-size: 14px;
+}
+
 .dock .search {
     position: absolute;
     top: 0;
