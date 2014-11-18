@@ -39,10 +39,18 @@ $(function () {
     filters['sub'] = filters['extends'];
 
     var parseQuery = function (query) {
-        query = query.trim();
         var criteria = [];
-        var tokens = query.split(' ');
         var sort = 'alphabetic';
+
+        if (!query) {
+            return {
+                criteria: criteria,
+                sort: sort
+            };
+        }
+
+        query = query.trim();
+        var tokens = query.split(' ');
 
         for (var i = 0; i < tokens.length; i++) {
             var token = tokens[i];
@@ -89,6 +97,7 @@ $(function () {
                 .attr('href', suggestion.path)
                 .attr('target', 'javadoc')
                 .text(suggestion.name)
+                .addClass(suggestion.fileType.toLowerCase())
                 .appendTo($sidebar);
         });
     };
@@ -96,26 +105,31 @@ $(function () {
     var source = function (query, process) {
         var suggestions = data;
 
-        if (query) {
-            var parsedQuery = parseQuery(query);
+        var parsedQuery = parseQuery(query);
 
-            _.each(parsedQuery.criteria, function (criterion) {
-                if (suggestions.length > 0) {
-                    var filter = filters[criterion.filter];
-                    var val = criterion.value;
-                    if (!val) {
-                        suggestions = [];
-                    } else if (filter) {
-                        suggestions = filter(val, suggestions);
-                    }
+        _.each(parsedQuery.criteria, function (criterion) {
+            if (suggestions.length > 0) {
+                var filter = filters[criterion.filter];
+                var val = criterion.value;
+                if (!val) {
+                    suggestions = [];
+                } else if (filter) {
+                    suggestions = filter(val, suggestions);
                 }
+            }
+        });
+
+        // get rid of corba stuff
+        if (query.toLowerCase().indexOf('corba') < 0 || query.toLowerCase().indexOf('omg') < 0) {
+            suggestions = _.filter(suggestions, function (o) {
+                return o['packageName'].indexOf('org.omg') < 0;
             });
         }
 
-        if (parsedQuery && parsedQuery.sort === 'relevance') {
+        if (parsedQuery.sort === 'relevance') {
             suggestions.sort(function (a, b) {
-                var name1 = a.name;
-                var name2 = b.name;
+                var name1 = a.name.toLowerCase();
+                var name2 = b.name.toLowerCase();
 
                 if (name1.length < name2.length) {
                     return -1
@@ -137,8 +151,8 @@ $(function () {
             });
         } else {
             suggestions.sort(function (a, b) {
-                var name1 = a.name;
-                var name2 = b.name;
+                var name1 = a.name.toLowerCase();
+                var name2 = b.name.toLowerCase();
 
                 if (name1 < name2) {
                     return -1
