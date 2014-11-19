@@ -3,6 +3,8 @@ $(function () {
 
     var data = '{{DATA}}';
 
+    var searchResult = null;
+
     var filters = {
         'name': function (val, items) {
             return _.filter(items, function (o) {
@@ -95,23 +97,37 @@ $(function () {
         return new Date().getTime();
     };
 
-    var renderSearchResults = function (suggestions) {
+    var renderNextPage = function () {
         var t0 = now();
 
         var $sidebar = $('.sidebar');
-        $sidebar.html('');
-        $sidebar.scrollTop();
 
-        _.each(suggestions, function (suggestion) {
+        var items = searchResult.more();
+
+        _.each(items, function (item) {
             $('<a>')
-                .attr('href', suggestion.path)
+                .attr('href', item.path)
                 .attr('target', 'javadoc')
-                .text(suggestion.name)
-                .addClass(suggestion.fileType.toLowerCase())
+                .text(item.name)
+                .addClass(item.fileType.toLowerCase())
                 .appendTo($sidebar);
         });
 
+        if (searchResult.hasMore()) {
+            $('<button>')
+                .addClass('btn btn-default btn-sm show-more')
+                .text('Show More...')
+                .appendTo($sidebar);
+        }
+
         console.log('rendering took %dms', now() - t0);
+    };
+
+    var renderSearchResults = function () {
+        var $sidebar = $('.sidebar');
+        $sidebar.html('');
+        $sidebar.scrollTop();
+        renderNextPage();
     };
 
     var doSearch = function (query) {
@@ -119,31 +135,31 @@ $(function () {
 
         var t0 = now();
 
-        var searchResults = data;
+        var items = data;
 
         var parsedQuery = parseQuery(query);
 
         _.each(parsedQuery.criteria, function (criterion) {
-            if (searchResults.length > 0) {
+            if (items.length > 0) {
                 var filter = filters[criterion.filter];
                 var val = criterion.value;
                 if (!val) {
-                    searchResults = [];
+                    items = [];
                 } else if (filter) {
-                    searchResults = filter(val, searchResults);
+                    items = filter(val, items);
                 }
             }
         });
 
         // get rid of corba stuff
         if (query.toLowerCase().indexOf('corba') < 0 || query.toLowerCase().indexOf('omg') < 0) {
-            searchResults = _.filter(searchResults, function (o) {
+            items = _.filter(items, function (o) {
                 return o['packageName'].indexOf('org.omg') < 0;
             });
         }
 
         if (parsedQuery.sort === 'relevance') {
-            searchResults.sort(function (a, b) {
+            items.sort(function (a, b) {
                 var name1 = a.name.toLowerCase();
                 var name2 = b.name.toLowerCase();
 
@@ -166,7 +182,7 @@ $(function () {
                 return 0;
             });
         } else {
-            searchResults.sort(function (a, b) {
+            items.sort(function (a, b) {
                 var name1 = a.name.toLowerCase();
                 var name2 = b.name.toLowerCase();
 
@@ -182,9 +198,11 @@ $(function () {
             });
         }
 
+        searchResult = new SearchResult(items);
+
         console.log('search took %dms', now() - t0);
 
-        renderSearchResults(searchResults);
+        renderSearchResults();
 
         if (localStorage) {
             localStorage.setItem("query", query);
@@ -203,4 +221,36 @@ $(function () {
             }
         })
         .val(query);
+
+    $('body')
+        .on('click', '.show-more', function () {
+            $(this).remove();
+            renderNextPage();
+        });
+
+    function SearchResult(items) {
+        this.items = items;
+        this.pageSize = 250;
+        this.maxPages = Math.ceil(this.items.length / this.pageSize);
+        this.page = 0;
+
+        this.more = function () {
+            if (!this.hasMore()) {
+                throw 'max pages exceeded: ' + this.maxPages;
+            }
+
+            this.page++;
+            var offsetStart = (this.page - 1) * this.pageSize;
+            var offsetEnd = offsetStart + this.pageSize;
+            if (offsetEnd > this.items.length - 1) {
+                offsetEnd = this.items.length - 1;
+            }
+
+            return items.slice(offsetStart, offsetEnd);
+        };
+
+        this.hasMore = function () {
+            return this.maxPages > this.page;
+        };
+    }
 });
