@@ -74,7 +74,7 @@ body {
     height: 44px;
     width: 100%;
     padding: 10px;
-    margin: 0 22px 0;
+    margin: 0 22px;
     font-size: 18px;
     font-weight: 200;
     color: #333;
@@ -99,6 +99,19 @@ body {
     color: #ABABAB;
     font-weight: 100;
     font-size: 20px;
+}
+
+.dock .search a.help {
+    position: absolute;
+    top: 8px;
+    right: 20px;
+    color: #ABABAB;
+    font-weight: 100;
+    font-size: 20px;
+}
+
+.dock .search a.help:hover {
+    color: #555;
 }
 
 .sidebar {

@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>Javadoc API Reloaded</title>
+    <title>Javadoc API 1.8 - Reloaded</title>
 
-    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
     <link rel="stylesheet" href="reloaded.css">
 
@@ -28,6 +28,9 @@
         <div class="search">
             <i class="fa fa-search"></i>
             <input id="search-input" type="text" placeholder="Enter search query..." autofocus>
+            <a class="help" href="#" title="Help" data-toggle="modal" data-target="#help-dialog">
+                <i class="fa fa-question-circle"></i>
+            </a>
         </div>
     </div>
     <div class="sidebar"></div>
@@ -37,8 +40,27 @@
 </div>
 
 
+<div class="modal fade" id="help-dialog" tabindex="-1" role="dialog" aria-labelledby="Help" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">About</h4>
+            </div>
+            <div class="modal-body">
+                PLEASE HLEP!!1
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Got it!</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 <script src="search.js"></script>
 
 </body>
