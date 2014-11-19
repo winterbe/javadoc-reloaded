@@ -193,7 +193,7 @@ $(function () {
 
     var search = _.debounce(doSearch, 250);
 
-    var query = localStorage ? localStorage.getItem('query') : '';
+    var query = localStorage ? localStorage.getItem('query') || '' : '';
     search(query, renderSearchResults);
 
     $('#search-input')
