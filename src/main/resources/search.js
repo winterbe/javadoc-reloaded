@@ -5,6 +5,32 @@ $(function () {
 
     var searchResult = null;
 
+    function SearchResult(items) {
+        this.items = items;
+        this.pageSize = 250;
+        this.maxPages = Math.ceil(this.items.length / this.pageSize);
+        this.page = 0;
+
+        this.more = function () {
+            if (!this.hasMore()) {
+                throw 'max pages exceeded: ' + this.maxPages;
+            }
+
+            this.page++;
+            var offsetStart = (this.page - 1) * this.pageSize;
+            var offsetEnd = offsetStart + this.pageSize;
+            if (offsetEnd > this.items.length - 1) {
+                offsetEnd = this.items.length - 1;
+            }
+
+            return items.slice(offsetStart, offsetEnd);
+        };
+
+        this.hasMore = function () {
+            return this.maxPages > this.page;
+        };
+    }
+
     var filters = {
         'name': function (val, items) {
             return _.filter(items, function (o) {
@@ -212,7 +238,7 @@ $(function () {
     var search = _.debounce(doSearch, 250);
 
     var query = localStorage ? localStorage.getItem('query') || '' : '';
-    search(query, renderSearchResults);
+    search(query);
 
     $('#search-input')
         .on('keyup', function (ev) {
@@ -228,29 +254,15 @@ $(function () {
             renderNextPage();
         });
 
-    function SearchResult(items) {
-        this.items = items;
-        this.pageSize = 250;
-        this.maxPages = Math.ceil(this.items.length / this.pageSize);
-        this.page = 0;
 
-        this.more = function () {
-            if (!this.hasMore()) {
-                throw 'max pages exceeded: ' + this.maxPages;
-            }
-
-            this.page++;
-            var offsetStart = (this.page - 1) * this.pageSize;
-            var offsetEnd = offsetStart + this.pageSize;
-            if (offsetEnd > this.items.length - 1) {
-                offsetEnd = this.items.length - 1;
-            }
-
-            return items.slice(offsetStart, offsetEnd);
-        };
-
-        this.hasMore = function () {
-            return this.maxPages > this.page;
-        };
+    if (localStorage && !localStorage.getItem('helpShown')) {
+        setTimeout(function () {
+            $('#help-dialog').modal({
+                keyboard: true,
+                show: true
+            });
+            localStorage.setItem("helpShown", true);
+        }, 750);
     }
+
 });
