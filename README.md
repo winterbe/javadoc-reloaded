@@ -3,6 +3,8 @@ Javadoc Reloaded
 
 The Javadoc Reloaded project transforms arbitrary Javadoc API folders into fully fledged searchable webapps from the 21st century. It's a proposal for <a href="http://openjdk.java.net/jeps/225">JEP 225</a> crafted by <a href="http://winterbe.com">Benjamin Winterberg</a>.
 
+#### Demo: http://winterbe.com/projects/javadoc-reloaded/javase/8/api/
+
 ### Compatibility
 
 The tool is written in Java 8 and built with Maven 3. The frontend is tested and optimized for current desktop browser versions (Chrome, Firefox, Safari). If you find any issues related to Internet Explorer or other browsers, please let me know.
