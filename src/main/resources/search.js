@@ -7,7 +7,7 @@ $(function () {
 
     function SearchResult(items) {
         this.items = items;
-        this.pageSize = 250;
+        this.pageSize = 200;
         this.maxPages = Math.ceil(this.items.length / this.pageSize);
         this.page = 0;
 
@@ -146,7 +146,7 @@ $(function () {
                 .appendTo($sidebar);
         }
 
-        console.log('rendering took %dms', now() - t0);
+        //console.log('rendering took %dms', now() - t0);
     };
 
     var renderSearchResults = function () {
@@ -226,7 +226,7 @@ $(function () {
 
         searchResult = new SearchResult(items);
 
-        console.log('search took %dms', now() - t0);
+        //console.log('search took %dms', now() - t0);
 
         renderSearchResults();
 

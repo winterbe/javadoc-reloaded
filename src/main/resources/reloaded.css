@@ -11,6 +11,22 @@ body {
     overflow: hidden;
 }
 
+a, a:visited, a:focus, a:active, a:hover {
+    outline: none !important;
+}
+
+button:active, button:hover {
+    outline: none !important;
+}
+
+a:active, a:focus, a:visited {
+    text-decoration: none;
+}
+
+::-moz-focus-inner {
+    border: 0;
+}
+
 .main {
     position: absolute;
     left: 0;
@@ -135,6 +151,7 @@ body {
     padding: 10px 15px;
     color: #364C5D;
     font-weight: 400;
+    height: 38px;
 }
 
 .sidebar a.interface {
