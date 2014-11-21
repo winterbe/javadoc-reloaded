@@ -7,6 +7,10 @@ The Javadoc Reloaded project transforms arbitrary Javadoc API folders into fully
 
 The tool is written in Java 8 and built with Maven 3. The frontend is tested and optimized for current desktop browser versions (Chrome, Firefox, Safari). If you find any issues related to Internet Explorer or other browsers, please let me know.
 
+### Known issues
+
+The frontend is currently missing keyboard navigation through search results. It's also not optimized for mobile browsers at the moment. This may be subject to future work. Just send me your feedback about missing features or bugs by <a href="https://github.com/winterbe/javadoc-reloaded/issues">opening an issue</a>.
+
 ### Contribute
 
 Feel free to <a href="https://github.com/winterbe/javadoc-reloaded/fork">fork this project</a> and send me pull requests. You can also send me feedback by <a href="https://github.com/winterbe/javadoc-reloaded/issues">opening an issue</a>.
