@@ -13,7 +13,7 @@ The frontend is currently missing keyboard navigation through search results. It
 
 ### Contribute
 
-Feel free to <a href="https://github.com/winterbe/javadoc-reloaded/fork">fork this project</a> and send me pull requests. You can also send me feedback by <a href="https://github.com/winterbe/javadoc-reloaded/issues">opening an issue</a>.
+Feel free to <a href="https://github.com/winterbe/javadoc-reloaded/fork">fork this project</a> and send me pull requests. You can also send me feedback via <a href="https://twitter.com/benontherun">Twitter</a> or by <a href="https://github.com/winterbe/javadoc-reloaded/issues">opening an issue</a>.
 
 ### License
 
