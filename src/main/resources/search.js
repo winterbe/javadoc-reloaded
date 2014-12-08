@@ -20,7 +20,7 @@ $(function () {
             var offsetStart = (this.page - 1) * this.pageSize;
             var offsetEnd = offsetStart + this.pageSize;
             if (offsetEnd > this.items.length - 1) {
-                offsetEnd = this.items.length - 1;
+                offsetEnd = this.items.length;
             }
 
             return items.slice(offsetStart, offsetEnd);
